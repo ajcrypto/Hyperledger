@@ -1,0 +1,101 @@
+/**
+@param{org.acme.shipping.perishable.OurSetupDemo} ourSetupDemo
+@transaction
+*/
+
+function ourSetupDemo(ourSetupDemo){
+
+  var factory= getFactory();
+  var NS= org.acme.shipping.perishable;
+  
+  // Create the grower
+  var grower= factory.newResource(NS,'Grower','farmer@email.com');
+  var growerAddress= factory.newConcept(NS,'Address');
+  growerAddress.Country='USA';
+  grower.address=growerAddress;
+  grower.accountBalance=0;
+  
+  
+  // Create the grower
+  var grower2= factory.newResource(NS,'Grower','farmer2@email.com');
+  var grower2Address= factory.newConcept(NS,'Address');
+  grower2Address.Country='USA';
+  grower2.address=grower2Address;
+  grower2.accountBalance=0;
+  
+  
+  // Create the grower
+  var grower3= factory.newResource(NS,'Grower','farmer3@email.com');
+  var grower3Address= factory.newConcept(NS,'Address');
+  grower3Address.Country='USA';
+  grower3.address=grower3Address;
+  grower3.accountBalance=0;
+  
+  
+  // Create the importer
+  var importer= factory.newResource(NS,'Importer','importer@email.com');
+  var importerAddress= factory.newConcept(NS,'Address');
+  importerAddress.country='USA';
+  importer.address= importerAddress;
+  importer.accountBalance=0;
+  
+  // Create the shipper
+  var shipper=factory.newResource(NS,'Shipper','shipper@email.com');
+  var shipperAddress=factory.newConcept(NS,'Address');
+  shipperAddress.country='USA';
+  shipper.address=shipperAddress;
+  shipper.accountBalance=0;
+  
+  // Create the contract
+  var contract=factory.newResource(NS,'Contract','CON_001');
+  contract.grower=factory.newRelationship(NS,'Grower','farmer@email.com');
+  contract.shipper=factory.newRelationship(NS,'Shipper','shipper@email.com');
+  contract.importer=factory.newRelationship(NS,'Importer','importer@email.com');
+  var tomorrow=ourSetupDemo.timestamp;
+  tomorrow.setDate(tomorrow.getDate()+1);
+  contract.unitPrice=0.5;
+  contract.minTemperature=2;
+  contract.maxTemperature=10;
+  contract.minPenaltyFactor=0.2;
+  contract.maxPenaltyFactor=0.1;
+  
+  // Create the shipment
+  var shipment=factory.newResource(NS,'Shipment','SHIP_001');
+  shipment.type='BANANA';
+  shipment.status='IN_TRANSIT';
+  shipment.unitCount=5000;
+  shipment.contract=factory.newRelationship(NS,'Contract','CON_001');
+
+
+// A bunch of javascript registry
+
+return getParticipantRegistry(NS + '.Grower')
+	.then(function(growerRegistry){
+	return growerRegistry.addAll([grower,grower2,grower3]);
+})
+	.then(function(){
+	return getParticipantRegistry(NS +'.Shipper');
+})
+	.then(function(shipperRegistry){
+	return shipperRegistry.addAll([shipper]);
+})
+	.then(function(){
+	return getParticipantRegistry(NS +'.importer');
+})
+  .then(function(importerRegistry){
+    return importerRegistry.addAll([importer]);
+    })
+  
+  .then(function(){
+	return getAssetRegistry(NS +'.Contract');
+})
+  .then(function(contractRegistry){
+	return contractRegistry.addAll([contract]);
+})
+  .then(function(){
+	return getAssetRegistry(NS +'.Shipment');
+})
+  .then(function(shipmentRegistry){
+	return shipmentRegistry.addAll([shipment]);
+})
+}

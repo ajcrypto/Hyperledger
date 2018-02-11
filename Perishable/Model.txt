@@ -1,0 +1,65 @@
+/**
+ * Sample business network definition.
+ */
+namespace org.acme.shipping.perishable
+
+asset Contract identified by contractId{
+o String contractId
+--> Grower grower
+--> Importer importer
+--> Shipper shipper
+o DateTime arrivalDateTime
+o Double unitPrice
+o Double minTemperature
+o Double maxTemperature
+o Double minPenaltyFactor
+o Double maxPenaltyFactor
+}
+
+asset Shipment identified by shipmentId{
+o String shipmentId
+o ProductType type
+o ShipmentStatus status
+o Long unitCount
+//o TemperatureReading[] temperatureReading
+--> Contract contract
+}
+
+enum ProductType{
+o BANANA
+o APPLE
+o COFFEE
+o PEACHES
+}
+
+enum ShipmentStatus{
+
+o CREATED
+o IN_TRANSIT
+o ARRIVED
+}
+
+abstract participant Business identified by email{
+o String email
+o Double accountBalance
+o Address address
+}
+
+concept Address{
+o String city optional
+o String street optional
+o String Country 
+o String zipcode
+}
+
+participant Grower extends Business{
+}
+
+participant Importer extends Business{
+}
+
+participant Shipper extends Business{
+}
+
+transaction OurSetupDemo{
+}
