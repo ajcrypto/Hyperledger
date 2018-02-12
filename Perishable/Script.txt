@@ -99,3 +99,36 @@ return getParticipantRegistry(NS + '.Grower')
 	return shipmentRegistry.addAll([shipment]);
 })
 }
+
+/**
+@param{org.acme.shipping.perishable.TemperatureReading} temperatureReading
+@transaction
+*/
+
+//Here we are not saying new relationship as this is transaction  we are dealing with
+function temperatureReading(temperatureReading)
+{
+  var shipment= temperatureReading.shipment;
+  console.log('Adding temperature of'+temperatureReading.centigrade+ 'to shipment');
+
+	if(shipment.temperatureReadings)
+      shipment.temperatureReadings.push(temperatureReading);
+  	else
+      shipment.temperatureReadings = [temperatureReading];
+  
+  return getAssetRegistry('org.acme.shipping.perishible.Shipment')
+	.then(function(shipmentRegistry){
+  		return shipmentRegistry.update(shipment); 
+  	})
+}
+
+/**
+@param{org.acme.shipping.perishable.ShipmentReceived} shipmentReceived
+@transaction
+*/
+
+
+function shipmentReceived(shipmentReceived)
+{
+  
+}

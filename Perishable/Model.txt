@@ -21,7 +21,7 @@ o String shipmentId
 o ProductType type
 o ShipmentStatus status
 o Long unitCount
-//o TemperatureReading[] temperatureReading
+o TemperatureReading[] temperatureReading
 --> Contract contract
 }
 
@@ -62,4 +62,15 @@ participant Shipper extends Business{
 }
 
 transaction OurSetupDemo{
+}
+
+abstract transaction ShipmentTransaction{
+  --> Shipment shipment
+}
+
+transaction TemperatureReading extends ShipmentTransaction{
+o Double centigrade
+}
+
+transaction ShipmentReceived extends ShipmentTransaction{
 }
